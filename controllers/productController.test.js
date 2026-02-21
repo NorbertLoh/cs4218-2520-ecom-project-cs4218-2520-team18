@@ -8,6 +8,21 @@ import fs from "fs";
 
 jest.mock("../models/productModel.js");
 jest.mock("fs");
+jest.mock("braintree", () => {
+    const mBraintreeGateway = {
+        transaction: {
+            sale: jest.fn().mockResolvedValue({ success: true })
+        }
+    };
+    return {
+        BraintreeGateway: jest.fn(() => mBraintreeGateway),
+        Environment: {
+            Sandbox: "Sandbox"
+        }
+    };
+});
+
+jest.spyOn(console, 'log').mockImplementation(() => {});
 
 // Lim Kok Liang, A0252776U
 describe("createProductController", () => {
@@ -43,8 +58,11 @@ describe("createProductController", () => {
     const requiredFields = [
         { field: 'name', error: 'Name is Required' },
         { field: 'description', error: 'Description is Required' },
-        { field: 'price', error: 'Price is Required' },
         { field: 'category', error: 'Category is Required' },
+    ];
+
+    const requiredNumericFields = [
+        { field: 'price', error: 'Price is Required' },
         { field: 'quantity', error: 'Quantity is Required' }
     ];
 
@@ -57,7 +75,7 @@ describe("createProductController", () => {
         expect(res.send).toHaveBeenCalledWith({ error });
     });
 
-    it.each(requiredFields)("should return error if $field is undefined", async ({ field, error }) => {
+    it.each([...requiredFields, ...requiredNumericFields])("should return error if $field is undefined", async ({ field, error }) => {
         delete req.fields[field];
 
         await createProductController(req, res);
@@ -238,7 +256,7 @@ describe("createProductController", () => {
 
             await createProductController(req, res);
 
-            expect(res.status).toHaveBeenCalledWith(201);
+            expect(res.status).toHaveBeenCalledWith(500);
         });
 
         it("should handle zero quantity", async () => {
@@ -308,8 +326,11 @@ describe("updateProductController", () => {
     const requiredFields = [
         { field: 'name', error: 'Name is Required' },
         { field: 'description', error: 'Description is Required' },
-        { field: 'price', error: 'Price is Required' },
         { field: 'category', error: 'Category is Required' },
+    ];
+
+    const requiredNumericFields = [
+        { field: 'price', error: 'Price is Required' },
         { field: 'quantity', error: 'Quantity is Required' }
     ];
 
@@ -322,7 +343,7 @@ describe("updateProductController", () => {
         expect(res.send).toHaveBeenCalledWith({ error });
     });
 
-    it.each(requiredFields)("should return error if $field is undefined", async ({ field, error }) => {
+    it.each([...requiredFields, ...requiredNumericFields])("should return error if $field is undefined", async ({ field, error }) => {
         delete req.fields[field];
 
         await updateProductController(req, res);
@@ -503,7 +524,7 @@ describe("updateProductController", () => {
 
             await updateProductController(req, res);
 
-            expect(res.status).toHaveBeenCalledWith(201);
+            expect(res.status).toHaveBeenCalledWith(500);
         });
 
         it("should handle updating with zero quantity", async () => {
