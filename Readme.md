@@ -184,6 +184,13 @@ To begin unit testing with Jest in your project, follow these steps:
    - client/src/pages/CartPage.test.js
    - client/controllers/productController.test.js
 
+4. Billy Ho Cheng En
+   Unit Tests:
+   - client/src/pages/ProductDetails.test.js
+   - client/src/pages/categoryProduct.test.js
+   - controllers/productController.test.js
+
+
 ## 7. AI Declaration
 
 AI tools such as Copilot and Gemini were used throughout the milestone.
