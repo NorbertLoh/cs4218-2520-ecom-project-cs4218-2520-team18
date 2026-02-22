@@ -4,7 +4,7 @@ export const createCategoryController = async (req, res) => {
   try {
     const { name  } = req.body;
     if (!name || !name.trim()) {
-      return res.status(400).send({ message: "Name is required" });
+      return res.status(400).send({ success: false, message: "Name is required" });
     }
     const trimmedName = name.trim();
     const slug = slugify(trimmedName, { lower: true });
@@ -12,6 +12,7 @@ export const createCategoryController = async (req, res) => {
     const existingCategory = await categoryModel.findOne({ slug });
     if (existingCategory) {
       return res.status(409).send({
+        success: false,
         message: "Category already exists",
       });
     }
@@ -21,12 +22,14 @@ export const createCategoryController = async (req, res) => {
       slug: slug,
     }).save();
     res.status(201).send({
+      success: true,
       message: "New Category created",
       category,
     });
   } catch (error) {
     console.log(error);
     res.status(500).send({
+      success: false,
       error,
       message: "Error in Category",
     });
@@ -41,12 +44,12 @@ export const updateCategoryController = async (req, res) => {
     
     // Validate name
     if (!name || !name.trim()) {
-      return res.status(400).send({ message: "Name is required" });
+      return res.status(400).send({ success: false, message: "Name is required" });
     }
     
     // Validate id
     if (!id || !id.trim()) {
-      return res.status(400).send({ message: "Category ID is required" });
+      return res.status(400).send({ success: false, message: "Category ID is required" });
     }
     
     // Trim whitespace from name
@@ -61,17 +64,20 @@ export const updateCategoryController = async (req, res) => {
     // Check if category was found
     if (!category) {
       return res.status(404).send({
+        success: false,
         message: "Category not found",
       });
     }
     
     res.status(200).send({
+      success: true,
       message: "Category updated successfully",
       category,
     });
   } catch (error) {
     console.log(error);
     res.status(500).send({
+      success: false,
       error,
       message: "Error while updating Category",
     });
@@ -137,7 +143,7 @@ export const deleteCategoryController = async (req, res) => {
     
     // Validate id
     if (!id || !id.trim()) {
-      return res.status(400).send({ message: "Category ID is required" });
+      return res.status(400).send({ success: false, message: "Category ID is required" });
     }
     
     // Trim whitespace from id
@@ -148,16 +154,19 @@ export const deleteCategoryController = async (req, res) => {
     // Check if category was found and deleted
     if (!category) {
       return res.status(404).send({
+        success: false,
         message: "Category not found",
       });
     }
     
     res.status(200).send({
+      success: true,
       message: "Category deleted successfully",
     });
   } catch (error) {
     console.log(error);
     res.status(500).send({
+      success: false,
       message: "Error while deleting Category",
       error,
     });

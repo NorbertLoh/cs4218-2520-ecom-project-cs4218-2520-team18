@@ -56,7 +56,7 @@ describe("createCategoryController", () => {
         await createCategoryController(req, res);
 
         expect(res.status).toHaveBeenCalledWith(400);
-        expect(res.send).toHaveBeenCalledWith({ message: "Name is required" });
+        expect(res.send).toHaveBeenCalledWith({ success: false, message: "Name is required" });
     });
 
     it("should return message if category already exists", async () => {
@@ -66,6 +66,7 @@ describe("createCategoryController", () => {
 
         expect(res.status).toHaveBeenCalledWith(409);
         expect(res.send).toHaveBeenCalledWith({
+            success: false,
             message: "Category already exists",
         });
     });
@@ -78,6 +79,7 @@ describe("createCategoryController", () => {
 
         expect(res.status).toHaveBeenCalledWith(409);
         expect(res.send).toHaveBeenCalledWith({
+            success: false,
             message: "Category already exists",
         });
     });
@@ -93,6 +95,7 @@ describe("createCategoryController", () => {
 
         expect(res.status).toHaveBeenCalledWith(201);
         expect(res.send).toHaveBeenCalledWith({
+            success: true,
             message: "New Category created",
             category: { name: "Electronics", slug: "electronics" },
         });
@@ -105,6 +108,7 @@ describe("createCategoryController", () => {
 
         expect(res.status).toHaveBeenCalledWith(500);
         expect(res.send).toHaveBeenCalledWith({
+            success: false,
             error: expect.any(Error),
             message: "Error in Category",
         });
@@ -116,7 +120,7 @@ describe("createCategoryController", () => {
         await createCategoryController(req, res);
 
         expect(res.status).toHaveBeenCalledWith(400);
-        expect(res.send).toHaveBeenCalledWith({ message: "Name is required" });
+        expect(res.send).toHaveBeenCalledWith({ success: false, message: "Name is required" });
     });
 });
 
@@ -148,7 +152,7 @@ describe("updateCategoryController", () => {
         await updateCategoryController(req, res);
 
         expect(res.status).toHaveBeenCalledWith(400);
-        expect(res.send).toHaveBeenCalledWith({ message: "Name is required" });
+        expect(res.send).toHaveBeenCalledWith({ success: false, message: "Name is required" });
     });
 
     it("should return error if name is undefined", async () => {
@@ -157,7 +161,7 @@ describe("updateCategoryController", () => {
         await updateCategoryController(req, res);
 
         expect(res.status).toHaveBeenCalledWith(400);
-        expect(res.send).toHaveBeenCalledWith({ message: "Name is required" });
+        expect(res.send).toHaveBeenCalledWith({ success: false, message: "Name is required" });
     });
 
     it("should return error if id is missing", async () => {
@@ -166,7 +170,7 @@ describe("updateCategoryController", () => {
         await updateCategoryController(req, res);
 
         expect(res.status).toHaveBeenCalledWith(400);
-        expect(res.send).toHaveBeenCalledWith({ message: "Category ID is required" });
+        expect(res.send).toHaveBeenCalledWith({ success: false, message: "Category ID is required" });
     });
 
     // Whitespace-only input validation
@@ -176,7 +180,7 @@ describe("updateCategoryController", () => {
         await updateCategoryController(req, res);
 
         expect(res.status).toHaveBeenCalledWith(400);
-        expect(res.send).toHaveBeenCalledWith({ message: "Name is required" });
+        expect(res.send).toHaveBeenCalledWith({ success: false, message: "Name is required" });
     });
 
     // Logic tests - successful update
@@ -198,6 +202,7 @@ describe("updateCategoryController", () => {
         );
         expect(res.status).toHaveBeenCalledWith(200);
         expect(res.send).toHaveBeenCalledWith({
+            success: true,
             message: "Category updated successfully",
             category: mockCategory,
         });
@@ -211,6 +216,7 @@ describe("updateCategoryController", () => {
 
         expect(res.status).toHaveBeenCalledWith(404);
         expect(res.send).toHaveBeenCalledWith({
+            success: false,
             message: "Category not found",
         });
     });
@@ -224,6 +230,7 @@ describe("updateCategoryController", () => {
 
         expect(res.status).toHaveBeenCalledWith(500);
         expect(res.send).toHaveBeenCalledWith({
+            success: false,
             error: errorMessage,
             message: "Error while updating Category",
         });
@@ -238,6 +245,7 @@ describe("updateCategoryController", () => {
 
         expect(res.status).toHaveBeenCalledWith(500);
         expect(res.send).toHaveBeenCalledWith({
+            success: false,
             error: errorMessage,
             message: "Error while updating Category",
         });
@@ -259,6 +267,7 @@ describe("updateCategoryController", () => {
 
             expect(res.status).toHaveBeenCalledWith(200);
             expect(res.send).toHaveBeenCalledWith({
+                success: true,
                 message: "Category updated successfully",
                 category: mockCategory,
             });
@@ -277,6 +286,7 @@ describe("updateCategoryController", () => {
 
             expect(res.status).toHaveBeenCalledWith(200);
             expect(res.send).toHaveBeenCalledWith({
+                success: true,
                 message: "Category updated successfully",
                 category: mockCategory,
             });
@@ -295,6 +305,7 @@ describe("updateCategoryController", () => {
 
             expect(res.status).toHaveBeenCalledWith(200);
             expect(res.send).toHaveBeenCalledWith({
+                success: true,
                 message: "Category updated successfully",
                 category: mockCategory,
             });
@@ -346,7 +357,7 @@ describe("deleteCategoryController", () => {
         await deleteCategoryController(req, res);
 
         expect(res.status).toHaveBeenCalledWith(400);
-        expect(res.send).toHaveBeenCalledWith({ message: "Category ID is required" });
+        expect(res.send).toHaveBeenCalledWith({ success: false, message: "Category ID is required" });
     });
 
     it("should return error if id is undefined", async () => {
@@ -355,7 +366,7 @@ describe("deleteCategoryController", () => {
         await deleteCategoryController(req, res);
 
         expect(res.status).toHaveBeenCalledWith(400);
-        expect(res.send).toHaveBeenCalledWith({ message: "Category ID is required" });
+        expect(res.send).toHaveBeenCalledWith({ success: false, message: "Category ID is required" });
     });
 
     // Whitespace-only input validation
@@ -365,7 +376,7 @@ describe("deleteCategoryController", () => {
         await deleteCategoryController(req, res);
 
         expect(res.status).toHaveBeenCalledWith(400);
-        expect(res.send).toHaveBeenCalledWith({ message: "Category ID is required" });
+        expect(res.send).toHaveBeenCalledWith({ success: false, message: "Category ID is required" });
     });
 
     // Logic tests - successful deletion
@@ -382,6 +393,7 @@ describe("deleteCategoryController", () => {
         expect(categoryModel.findByIdAndDelete).toHaveBeenCalledWith("507f1f77bcf86cd799439011");
         expect(res.status).toHaveBeenCalledWith(200);
         expect(res.send).toHaveBeenCalledWith({
+            success: true,
             message: "Category deleted successfully",
         });
     });
@@ -394,6 +406,7 @@ describe("deleteCategoryController", () => {
 
         expect(res.status).toHaveBeenCalledWith(404);
         expect(res.send).toHaveBeenCalledWith({
+            success: false,
             message: "Category not found",
         });
     });
@@ -407,6 +420,7 @@ describe("deleteCategoryController", () => {
 
         expect(res.status).toHaveBeenCalledWith(500);
         expect(res.send).toHaveBeenCalledWith({
+            success: false,
             message: "Error while deleting Category",
             error: errorMessage,
         });
@@ -421,6 +435,7 @@ describe("deleteCategoryController", () => {
 
         expect(res.status).toHaveBeenCalledWith(500);
         expect(res.send).toHaveBeenCalledWith({
+            success: false,
             message: "Error while deleting Category",
             error: errorMessage,
         });
@@ -441,6 +456,7 @@ describe("deleteCategoryController", () => {
 
             expect(res.status).toHaveBeenCalledWith(200);
             expect(res.send).toHaveBeenCalledWith({
+                success: true,
                 message: "Category deleted successfully",
             });
         });
@@ -452,6 +468,7 @@ describe("deleteCategoryController", () => {
 
             expect(res.status).toHaveBeenCalledWith(404);
             expect(res.send).toHaveBeenCalledWith({
+                success: false,
                 message: "Category not found",
             });
         });
@@ -464,6 +481,7 @@ describe("deleteCategoryController", () => {
 
             expect(res.status).toHaveBeenCalledWith(500);
             expect(res.send).toHaveBeenCalledWith({
+                success: false,
                 message: "Error while deleting Category",
                 error: errorMessage,
             });
@@ -484,6 +502,10 @@ describe("deleteCategoryController", () => {
 
         expect(categoryModel.findByIdAndDelete).toHaveBeenCalledWith("507f1f77bcf86cd799439011");
         expect(res.status).toHaveBeenCalledWith(200);
+        expect(res.send).toHaveBeenCalledWith({
+            success: true,
+            message: "Category deleted successfully",
+        });
     });
 });
 
