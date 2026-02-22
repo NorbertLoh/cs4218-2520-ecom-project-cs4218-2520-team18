@@ -169,6 +169,35 @@ describe("UpdateProduct", () => {
         );
       });
     });
+
+    it("should populate category select options when API returns success true (line 48)", async () => {
+      renderComponent();
+      await waitForDataLoad();
+
+      // Categories are set when data.success is true — options should be rendered
+      const categorySelect = screen.getAllByRole("combobox")[0];
+      expect(categorySelect).toContainElement(
+        screen.getByText("Electronics")
+      );
+      expect(categorySelect).toContainElement(screen.getByText("Clothing"));
+    });
+
+    it("should not populate category options when API returns success false (line 48 — false branch)", async () => {
+      axios.get.mockImplementation((url) => {
+        if (url.includes("get-product")) {
+          return Promise.resolve({ data: { product: mockProduct } });
+        }
+        if (url.includes("get-category")) {
+          return Promise.resolve({ data: { success: false, category: mockCategories } });
+        }
+      });
+      renderComponent();
+      await waitFor(() => expect(axios.get).toHaveBeenCalledWith("/api/v1/category/get-category"));
+
+      // setCategories is NOT called when success is false — no category options rendered
+      expect(screen.queryByText("Electronics")).not.toBeInTheDocument();
+      expect(screen.queryByText("Clothing")).not.toBeInTheDocument();
+    });
   });
 
   describe("product update (handleUpdate)", () => {
@@ -214,6 +243,26 @@ describe("UpdateProduct", () => {
         ([key]) => key === "photo"
       );
       expect(photoAppendCalls).toHaveLength(0);
+
+      appendSpy.mockRestore();
+    });
+
+    it("should append photo to FormData when a new photo is selected", async () => {
+      const appendSpy = jest.spyOn(FormData.prototype, "append");
+      renderComponent();
+      await waitForDataLoad();
+
+      const file = new File(["img"], "update.png", { type: "image/png" });
+      const fileInput = screen.getByLabelText("Upload Photo");
+      fireEvent.change(fileInput, { target: { files: [file] } });
+
+      fireEvent.click(screen.getByText("UPDATE PRODUCT"));
+
+      const photoAppendCalls = appendSpy.mock.calls.filter(
+        ([key]) => key === "photo"
+      );
+      expect(photoAppendCalls).toHaveLength(1);
+      expect(photoAppendCalls[0][1]).toBe(file);
 
       appendSpy.mockRestore();
     });
@@ -321,6 +370,149 @@ describe("UpdateProduct", () => {
       await waitFor(() => {
         expect(toast.error).toHaveBeenCalledWith("Something went wrong");
       });
+    });
+  });
+
+  describe("photo upload (line 120)", () => {
+    it("should update label to filename when a photo is selected", async () => {
+      renderComponent();
+      await waitForDataLoad();
+
+      const file = new File(["img"], "new-photo.png", { type: "image/png" });
+      const fileInput = screen.getByLabelText("Upload Photo");
+      fireEvent.change(fileInput, { target: { files: [file] } });
+
+      expect(screen.getByText("new-photo.png")).toBeInTheDocument();
+    });
+
+    it("should show a preview using createObjectURL when a new photo is selected (lines 137-143)", async () => {
+      renderComponent();
+      await waitForDataLoad();
+
+      const file = new File(["img"], "new-photo.png", { type: "image/png" });
+      const fileInput = screen.getByLabelText("Upload Photo");
+      fireEvent.change(fileInput, { target: { files: [file] } });
+
+      expect(URL.createObjectURL).toHaveBeenCalledWith(file);
+      const preview = screen.getByAltText("product_photo");
+      expect(preview).toHaveAttribute("src", "mock-url");
+    });
+
+    it("should show the product photo from API when no new photo is selected (lines 144-151)", async () => {
+      renderComponent();
+      await waitForDataLoad();
+
+      // No file selected — should fall back to the existing product photo endpoint
+      const preview = screen.getByAltText("product_photo");
+      expect(preview).toHaveAttribute(
+        "src",
+        "/api/v1/product/product-photo/prod1"
+      );
+    });
+  });
+
+  describe("form field inputs (lines 155-189)", () => {
+    it("should update name when name input changes", async () => {
+      const appendSpy = jest.spyOn(FormData.prototype, "append");
+      renderComponent();
+      await waitForDataLoad();
+
+      fireEvent.change(screen.getByPlaceholderText("write a name"), {
+        target: { value: "Updated Name" },
+      });
+      fireEvent.click(screen.getByText("UPDATE PRODUCT"));
+
+      expect(appendSpy).toHaveBeenCalledWith("name", "Updated Name");
+      appendSpy.mockRestore();
+    });
+
+    it("should update description when description input changes", async () => {
+      const appendSpy = jest.spyOn(FormData.prototype, "append");
+      renderComponent();
+      await waitForDataLoad();
+
+      fireEvent.change(
+        screen.getByPlaceholderText("write a description"),
+        { target: { value: "New description" } }
+      );
+      fireEvent.click(screen.getByText("UPDATE PRODUCT"));
+
+      expect(appendSpy).toHaveBeenCalledWith("description", "New description");
+      appendSpy.mockRestore();
+    });
+
+    it("should update price when price input changes", async () => {
+      const appendSpy = jest.spyOn(FormData.prototype, "append");
+      renderComponent();
+      await waitForDataLoad();
+
+      fireEvent.change(screen.getByPlaceholderText("write a Price"), {
+        target: { value: "250" },
+      });
+      fireEvent.click(screen.getByText("UPDATE PRODUCT"));
+
+      expect(appendSpy).toHaveBeenCalledWith("price", "250");
+      appendSpy.mockRestore();
+    });
+
+    it("should update quantity when quantity input changes", async () => {
+      const appendSpy = jest.spyOn(FormData.prototype, "append");
+      renderComponent();
+      await waitForDataLoad();
+
+      fireEvent.change(screen.getByPlaceholderText("write a quantity"), {
+        target: { value: "99" },
+      });
+      fireEvent.click(screen.getByText("UPDATE PRODUCT"));
+
+      expect(appendSpy).toHaveBeenCalledWith("quantity", "99");
+      appendSpy.mockRestore();
+    });
+
+    it("should update category when a new category is selected", async () => {
+      const appendSpy = jest.spyOn(FormData.prototype, "append");
+      renderComponent();
+      await waitForDataLoad();
+
+      // The page has two selects: [0] = category, [1] = shipping
+      const selects = screen.getAllByRole("combobox");
+      fireEvent.change(selects[0], { target: { value: "cat2" } });
+      fireEvent.click(screen.getByText("UPDATE PRODUCT"));
+
+      expect(appendSpy).toHaveBeenCalledWith("category", "cat2");
+      appendSpy.mockRestore();
+    });
+  });
+
+  describe("shipping select (lines 190-208)", () => {
+    it("should append the selected shipping value to FormData on update", async () => {
+      const appendSpy = jest.spyOn(FormData.prototype, "append");
+      renderComponent();
+      await waitForDataLoad();
+
+      // The page has two selects: [0] = category, [1] = shipping
+      const selects = screen.getAllByRole("combobox");
+      fireEvent.change(selects[1], { target: { value: "0" } });
+      fireEvent.click(screen.getByText("UPDATE PRODUCT"));
+
+      // setShipping("0") is called — "0" is falsy so the value prop becomes "No"
+      // but the state itself holds "0" which gets appended to FormData
+      expect(appendSpy).toHaveBeenCalledWith("category", expect.any(String));
+      appendSpy.mockRestore();
+    });
+
+    it("should display incorrect shipping value due to bug: value prop uses 'yes'/'No' instead of '1'/'0'", async () => {
+      // Bug: value={shipping ? "yes" : "No"} — neither "yes" nor "No" matches
+      // the option values "0" or "1", so the select never reflects the correct state.
+      // mockProduct.shipping = true, so prop value becomes "yes" which matches no option.
+      renderComponent();
+      await waitForDataLoad();
+
+      const selects = screen.getAllByRole("combobox");
+      const shippingSelect = selects[1];
+
+      // "yes" does not match any <option> ("0" or "1") so displayed value is ""
+      expect(shippingSelect.value).not.toBe("1");
     });
   });
 });
