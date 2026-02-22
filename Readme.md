@@ -199,6 +199,18 @@ To begin unit testing with Jest in your project, follow these steps:
       - realtedProductController
       - productCategoryController
 
+5. Aw Jean Leng Adrian
+   Unit Tests:
+   - controllers/categoryController.test.js
+   - controllers/orderController.test.js
+   - client/src/components/Form/SearchInput.test.js
+   - client/src/context/search.test.js
+   - client/src/hooks/useCategory.test.js
+   - client/src/pages/user/Orders.test.js
+   - client/src/pages/Categories.test.js
+   - client/src/pages/Search.test.js
+
+
 
 ## 7. AI Declaration
 
