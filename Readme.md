@@ -227,4 +227,4 @@ Use of AI included:
 
 ## MS1 CI URL
 
-- [CI URL](CI_URL)
+- [MS1 CI URL](https://github.com/cs4218/cs4218-2520-ecom-project-cs4218-2520-team18/actions/runs/22281766846/job/64453440650)
