@@ -135,8 +135,7 @@ To begin unit testing with Jest in your project, follow these steps:
      ```
 
 ## 6. Workload
-
-1. Loh Ze Qing Norbert
+1. Loh Ze Qing Norbert   
    Unit Tests:
    - helpers/authHelper.test.js
    - helpers/validationHelper.test.js
@@ -157,7 +156,19 @@ To begin unit testing with Jest in your project, follow these steps:
    - client/src/pages/user/Profile.test.js
    - client/src/helpers/validation.test.js
 
-2. Sherwyn Ng Cheng Xin
+2. Lim Kok Liang  
+   Unit Tests:
+   - controllers/categoryController.test.js
+   - controllers/productController.test.js
+   - client/src/components/Form/CategoryForm.test.js
+   - client/src/pages/admin/Users.test.js
+   - client/src/pages/admin/Products.test.js
+   - client/src/pages/admin/CreateProduct.test.js
+   - client/src/pages/admin/UpdateProduct.test.js
+   - client/src/pages/admin/CreateCategory.test.js
+   - client/src/pages/admin/AdminOrders.test.js
+
+3. Sherwyn Ng Cheng Xin  
    Unit Tests:
    - client/src/pages/Contact.test.js
    - client/src/pages/Policy.test.js
@@ -167,15 +178,43 @@ To begin unit testing with Jest in your project, follow these steps:
    - client/src/components/Spinner.test.js
    - client/src/pages/About.test.js
    - client/src/pages/Pagenotfound.test.js
-   - client/config/db.test.js
    - client/src/pages/HomePage.test.js
    - client/src/context/cart.test.js
    - client/src/pages/CartPage.test.js
-   - client/controllers/productController.test.js
+   - config/db.test.js
+   - controllers/productController.test.js
+
+4. Billy Ho Cheng En  
+   Unit Tests:
+   - client/src/pages/ProductDetails.test.js
+   - client/src/pages/categoryProduct.test.js
+   - controllers/productController.test.js
+      - getProductController
+      - getSingleProductController
+      - productPhotoController
+      - productFiltersController
+      - productCountController
+      - productListController
+      - searchProductController
+      - realtedProductController
+      - productCategoryController
+
+5. Aw Jean Leng Adrian  
+   Unit Tests:
+   - controllers/categoryController.test.js
+   - controllers/orderController.test.js
+   - client/src/components/Form/SearchInput.test.js
+   - client/src/context/search.test.js
+   - client/src/hooks/useCategory.test.js
+   - client/src/pages/user/Orders.test.js
+   - client/src/pages/Categories.test.js
+   - client/src/pages/Search.test.js
+
+
 
 ## 7. AI Declaration
 
-AI tools such as Copilot and Gemini were used throughout the milestone.
+AI tools such as Copilot and Gemini were used throughout the milestone.  
 Use of AI included:
 
 - Generating boilerplate code for unit tests.
@@ -188,4 +227,4 @@ Use of AI included:
 
 ## MS1 CI URL
 
-- [CI URL](CI_URL)
+- [MS1 CI URL](https://github.com/cs4218/cs4218-2520-ecom-project-cs4218-2520-team18/actions/runs/22281766846/job/64453440650)
