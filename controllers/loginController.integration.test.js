@@ -227,6 +227,30 @@ describe("loginController - Integration Tests", () => {
 			expect(res.status).toHaveBeenCalledWith(200);
 		});
 
+		test("returns invalidError when validateEmail fails after user/password checks", async () => {
+			const { user, plainPassword } = await seedUser();
+			const req = {
+				body: {
+					email: user.email,
+					password: plainPassword,
+				},
+			};
+			const res = createResponse();
+
+			const validateEmailSpy = jest
+				.spyOn(validationHelper, "validateEmail")
+				.mockReturnValue(false);
+
+			await loginController(req, res);
+
+			expect(validateEmailSpy).toHaveBeenCalledWith(user.email);
+			expect(res.status).toHaveBeenCalledWith(400);
+			expect(res.send).toHaveBeenCalledWith({
+				success: false,
+				message: "Invalid Email or Password",
+			});
+		});
+
 		test.each([
 			["empty email", "", "Password123"],
 			["whitespace email", "   ", "Password123"],
