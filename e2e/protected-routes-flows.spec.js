@@ -1,3 +1,4 @@
+// Loh Ze Qing Norbert, A0277473R
 import { test, expect } from "@playwright/test";
 
 const SEEDED_ADMIN_EMAIL = process.env.SEED_ADMIN_EMAIL || "admin.e2e@example.com";
