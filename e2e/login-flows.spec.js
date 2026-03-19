@@ -32,6 +32,13 @@ const loginViaUi = async (page, email, password) => {
   await page.getByRole("button", { name: "LOGIN" }).click();
 };
 
+const openUserDashboardFromHeader = async (page, userName) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: userName }).first().click();
+  await page.getByRole("link", { name: /^Dashboard$/ }).click();
+  await expect(page).toHaveURL(/\/dashboard\/user$/);
+};
+
 test.describe("Login E2E flows", () => {
   test("valid login flow", async ({ page }) => {
     const user = buildUser("valid-login");
@@ -184,5 +191,38 @@ test.describe("Login E2E flows", () => {
       return input.validity.valueMissing;
     });
     expect(emailMissing).toBe(true);
+  });
+
+  // Loh Ze Qing Norbert, A0277473R
+  test("login session survives refresh and is revoked after logout for protected routes", async ({ page }) => {
+    const user = buildUser("refresh-guard");
+
+    await registerUserViaUi(page, user);
+    await page.goto("/login");
+
+    await loginViaUi(page, user.email, user.password);
+    await expect(page).toHaveURL("/");
+    await expect(page.getByRole("button", { name: user.name })).toBeVisible();
+
+    const authAfterLogin = await page.evaluate(() => JSON.parse(localStorage.getItem("auth") || "null"));
+    expect(authAfterLogin?.token).toBeTruthy();
+
+    await page.reload();
+    await expect(page.getByRole("button", { name: user.name })).toBeVisible();
+
+    await openUserDashboardFromHeader(page, user.name);
+    await expect(page.locator("h3", { hasText: user.email })).toBeVisible();
+
+    await page.goto("/");
+    await page.getByRole("button", { name: user.name }).first().click();
+    await page.getByRole("link", { name: "Logout" }).click();
+    await expect(page).toHaveURL(/\/login$/);
+
+    const authAfterLogout = await page.evaluate(() => localStorage.getItem("auth"));
+    expect(authAfterLogout).toBeNull();
+
+    await page.goto("/dashboard/user");
+    await expect(page.getByText(/redirecting to you in/i)).toBeVisible();
+    await expect(page).toHaveURL(/\/$|\/login$/, { timeout: 12000 });
   });
 });

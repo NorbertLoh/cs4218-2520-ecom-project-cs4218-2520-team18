@@ -81,6 +81,13 @@ const getAuthUserName = async (page) =>
     return auth?.user?.name ?? null;
   });
 
+const logoutFromNavbar = async (page, displayName) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: displayName }).first().click();
+  await page.getByRole("link", { name: "Logout" }).click();
+  await expect(page).toHaveURL(/\/login$/);
+};
+
 test.describe("Profile E2E flows", () => {
   test("valid profile update: name change updates profile, header, and dashboard", async ({ page }) => {
     const user = buildUser("valid-update");
@@ -214,5 +221,42 @@ test.describe("Profile E2E flows", () => {
 
     await expect(page.getByText("DOB cannot be in the future")).toBeVisible();
     expect(wasProfileRequestSent()).toBe(false);
+  });
+
+  // Loh Ze Qing Norbert, A0277473R
+  test("profile update persists across logout/login and still passes route guard checks", async ({ page }) => {
+    const user = buildUser("profile-logout-relogin");
+    const updatedName = `Relogin Name ${Date.now()}`;
+
+    await registerUserViaUi(page, user);
+    await loginViaUi(page, user.email, user.password);
+    await openProfilePage(page, user.name);
+
+    await page.getByPlaceholder("Enter Your Name").fill(updatedName);
+    await page.getByPlaceholder("Enter Your Password").fill(user.password);
+    await clickUpdate(page);
+
+    await expect(page.getByText("Profile Updated Successfully")).toBeVisible();
+    await expect(page.getByRole("button", { name: updatedName })).toBeVisible();
+
+    await logoutFromNavbar(page, updatedName);
+
+    const authAfterLogout = await page.evaluate(() => localStorage.getItem("auth"));
+    expect(authAfterLogout).toBeNull();
+
+    await page.goto("/dashboard/user");
+    await expect(page.getByText(/redirecting to you in/i)).toBeVisible();
+    await expect(page).toHaveURL(/\/$|\/login$/, { timeout: 12000 });
+
+    await page.goto("/login");
+    await loginViaUi(page, user.email, user.password);
+
+    await expect(page).toHaveURL("/");
+    await expect(page.getByRole("button", { name: updatedName })).toBeVisible();
+
+    await openDashboardPage(page, updatedName);
+    const dashboardCard = page.locator(".card.w-75.p-3");
+    await expect(dashboardCard).toContainText(updatedName);
+    await expect(dashboardCard).toContainText(user.email);
   });
 });
