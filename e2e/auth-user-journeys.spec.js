@@ -65,8 +65,9 @@ const logoutFromNavbar = async (page, displayedName) => {
 };
 
 test.describe("UI E2E Journeys", () => {
+  test.describe("Atomic linear workflows", () => {
   // Loh Ze Qing Norbert, A0277473R
-  test("register -> login -> home reflects authenticated header state", async ({ page }) => {
+    test("register -> login -> home reflects authenticated header state", async ({ page }) => {
     const user = buildUniqueUser();
 
     await registerUser(page, user);
@@ -75,10 +76,13 @@ test.describe("UI E2E Journeys", () => {
     await expect(page.getByRole("link", { name: "Login" })).toHaveCount(0);
     await expect(page.getByRole("link", { name: "Register" })).toHaveCount(0);
     await expect(page.getByText(user.name)).toBeVisible();
+    });
   });
 
+  test.describe("Cross workflows", () => {
+
   // Loh Ze Qing Norbert, A0277473R
-  test("register -> forgot password reset -> login with new password", async ({ page }) => {
+    test("register -> forgot password reset -> login with new password", async ({ page }) => {
     const user = buildUniqueUser();
 
     await registerUser(page, user);
@@ -96,10 +100,10 @@ test.describe("UI E2E Journeys", () => {
     await loginUser(page, user.email, user.newPassword);
     await expect(page.getByText(user.name)).toBeVisible();
     await expect(page.getByRole("link", { name: "Login" })).toHaveCount(0);
-  });
+    });
 
   // Loh Ze Qing Norbert, A0277473R
-  test("register -> login -> update profile -> logout -> protected route blocked -> re-login", async ({ page }) => {
+    test("register -> login -> update profile -> logout -> protected route blocked -> re-login", async ({ page }) => {
     const user = buildUniqueUser();
     const updatedName = `Updated ${Date.now()}`;
 
@@ -123,5 +127,6 @@ test.describe("UI E2E Journeys", () => {
     const dashboardCard = page.locator(".card.w-75.p-3");
     await expect(dashboardCard).toContainText(updatedName);
     await expect(dashboardCard).toContainText(user.email);
+    });
   });
 });
