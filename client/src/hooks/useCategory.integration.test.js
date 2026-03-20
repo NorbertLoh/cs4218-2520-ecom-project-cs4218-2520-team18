@@ -555,6 +555,94 @@ describe('useCategory Hook - Real Backend Integration Tests', () => {
         });
     });
 
+    describe('Re-render Behavior - Single API Call', () => {
+        test('Trigger re-render (without remount) → verify axios.get NOT called again', async () => {
+            await seedCategories([
+                { name: 'Test', slug: 'test' },
+            ]);
+
+            // Spy on axios.get
+            const axiosSpy = jest.spyOn(axios, 'get');
+
+            const { result, rerender } = renderHook(() => useCategory());
+
+            await waitFor(() => {
+                expect(result.current.length).toBe(1);
+            });
+
+            // axios.get called once on mount
+            const callCountAfterMount = axiosSpy.mock.calls.length;
+            expect(callCountAfterMount).toBe(1);
+
+            // Trigger re-render (without remount)
+            rerender();
+
+            // Wait a bit to ensure no additional calls
+            await new Promise(resolve => setTimeout(resolve, 100));
+
+            // axios.get should NOT be called again (useEffect has [] dependency)
+            expect(axiosSpy.mock.calls.length).toBe(callCountAfterMount);
+
+            axiosSpy.mockRestore();
+        });
+
+        test('Render hook → wait for data → trigger re-render → verify hook state persists', async () => {
+            await seedCategories([
+                { name: 'Persistent Category', slug: 'persistent-category' },
+            ]);
+
+            const { result, rerender } = renderHook(() => useCategory());
+
+            // Wait for data to load
+            await waitFor(() => {
+                expect(result.current.length).toBe(1);
+            });
+
+            const dataBeforeRerender = result.current;
+            expect(dataBeforeRerender[0].name).toBe('Persistent Category');
+
+            // Trigger re-render
+            rerender();
+
+            // Data should persist (not lost)
+            expect(result.current.length).toBe(1);
+            expect(result.current[0].name).toBe('Persistent Category');
+            expect(result.current).toEqual(dataBeforeRerender);
+        });
+
+        test('Multiple re-renders → data persists and no extra API calls', async () => {
+            await seedCategories([
+                { name: 'Multi Render Test', slug: 'multi-render-test' },
+            ]);
+
+            const axiosSpy = jest.spyOn(axios, 'get');
+
+            const { result, rerender } = renderHook(() => useCategory());
+
+            await waitFor(() => {
+                expect(result.current.length).toBe(1);
+            });
+
+            const initialCallCount = axiosSpy.mock.calls.length;
+
+            // Multiple re-renders
+            rerender();
+            rerender();
+            rerender();
+
+            await new Promise(resolve => setTimeout(resolve, 100));
+
+            // Data persists
+            expect(result.current.length).toBe(1);
+            expect(result.current[0].name).toBe('Multi Render Test');
+
+            // No extra API calls
+            expect(axiosSpy.mock.calls.length).toBe(initialCallCount);
+
+            axiosSpy.mockRestore();
+        });
+    });
+
     describe('Real Backend Integration End-to-End', () => {
         test('Complete integration: MongoDB → Express → Axios → React Hook → State', async () => {
             // 1. Seed MongoDB
