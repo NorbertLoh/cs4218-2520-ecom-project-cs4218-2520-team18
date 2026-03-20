@@ -541,6 +541,7 @@ describe("updateProfileController - Integration Tests", () => {
 	});
 });
 
+// Billy Ho Cheng En, A0252588R
 describe("getAllUsersController - Integration Tests", () => {
 	let mongoServer;
 	let userCounter = 0;
@@ -651,7 +652,8 @@ describe("getAllUsersController - Integration Tests", () => {
 
 			expect(res.status).toHaveBeenCalledWith(200);
 			const responseData = res.send.mock.calls[0][0];
-			expect(responseData.users[0]).not.toHaveProperty("password");
+			const user = responseData.users[0].toObject ? responseData.users[0].toObject() : responseData.users[0];
+			expect(user.password).toBeUndefined();
 		});
 
 		test("excludes answer (security question) field from response", async () => {
@@ -664,7 +666,8 @@ describe("getAllUsersController - Integration Tests", () => {
 
 			expect(res.status).toHaveBeenCalledWith(200);
 			const responseData = res.send.mock.calls[0][0];
-			expect(responseData.users[0]).not.toHaveProperty("answer");
+			const user = responseData.users[0].toObject ? responseData.users[0].toObject() : responseData.users[0];
+			expect(user.answer).toBeUndefined();
 		});
 
 		test("returns user fields: name, email, phone, role, address", async () => {

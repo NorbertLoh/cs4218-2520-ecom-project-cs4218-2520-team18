@@ -86,7 +86,7 @@ describe("Users Page - Integration Tests", () => {
 
 	describe("Component Rendering", () => {
 		test("should render Layout with correct title", async () => {
-			axios.get.mockResolvedValue({ data: [] });
+			axios.get.mockResolvedValue({ data: { users: [] } });
 			renderUsersPage();
 
 			await waitFor(() => {
@@ -100,7 +100,7 @@ describe("Users Page - Integration Tests", () => {
 		});
 
 		test("should render AdminMenu component", async () => {
-			axios.get.mockResolvedValue({ data: [] });
+			axios.get.mockResolvedValue({ data: { users: [] } });
 			renderUsersPage();
 
 			await waitFor(() => {
@@ -109,7 +109,7 @@ describe("Users Page - Integration Tests", () => {
 		});
 
 		test("should render 'All Users' heading", async () => {
-			axios.get.mockResolvedValue({ data: [] });
+			axios.get.mockResolvedValue({ data: { users: [] } });
 			renderUsersPage();
 
 			await waitFor(() => {
@@ -120,7 +120,7 @@ describe("Users Page - Integration Tests", () => {
 
 	describe("Data Fetching", () => {
 		test("should fetch users from API on mount", async () => {
-			axios.get.mockResolvedValue({ data: mockUsers });
+			axios.get.mockResolvedValue({ data: { users: mockUsers } });
 			renderUsersPage();
 
 			await waitFor(() => {
@@ -141,7 +141,7 @@ describe("Users Page - Integration Tests", () => {
 
 	describe("User Display", () => {
 		test("should display all users after fetching", async () => {
-			axios.get.mockResolvedValue({ data: mockUsers });
+			axios.get.mockResolvedValue({ data: { users: mockUsers } });
 			renderUsersPage();
 
 			await waitFor(() => {
@@ -152,7 +152,7 @@ describe("Users Page - Integration Tests", () => {
 		});
 
 		test("should display user emails", async () => {
-			axios.get.mockResolvedValue({ data: mockUsers });
+			axios.get.mockResolvedValue({ data: { users: mockUsers } });
 			renderUsersPage();
 
 			await waitFor(() => {
@@ -163,7 +163,7 @@ describe("Users Page - Integration Tests", () => {
 		});
 
 		test("should display user phone numbers", async () => {
-			axios.get.mockResolvedValue({ data: mockUsers });
+			axios.get.mockResolvedValue({ data: { users: mockUsers } });
 			renderUsersPage();
 
 			await waitFor(() => {
@@ -174,7 +174,7 @@ describe("Users Page - Integration Tests", () => {
 		});
 
 		test("should display empty state when no users exist", async () => {
-			axios.get.mockResolvedValue({ data: [] });
+			axios.get.mockResolvedValue({ data: { users: [] } });
 			renderUsersPage();
 
 			await waitFor(() => {
@@ -187,7 +187,7 @@ describe("Users Page - Integration Tests", () => {
 		});
 
 		test("should display users in a table format", async () => {
-			axios.get.mockResolvedValue({ data: mockUsers });
+			axios.get.mockResolvedValue({ data: { users: mockUsers } });
 			renderUsersPage();
 
 			await waitFor(() => {
@@ -212,7 +212,7 @@ describe("Users Page - Integration Tests", () => {
 					role: 0,
 				},
 			];
-			axios.get.mockResolvedValue({ data: usersWithMissingPhone });
+			axios.get.mockResolvedValue({ data: { users: usersWithMissingPhone } });
 			renderUsersPage();
 
 			await waitFor(() => {
@@ -223,7 +223,7 @@ describe("Users Page - Integration Tests", () => {
 
 		test("should handle single user", async () => {
 			const singleUser = [mockUsers[0]];
-			axios.get.mockResolvedValue({ data: singleUser });
+			axios.get.mockResolvedValue({ data: { users: singleUser } });
 			renderUsersPage();
 
 			await waitFor(() => {
@@ -241,7 +241,7 @@ describe("Users Page - Integration Tests", () => {
 				phone: `+100000000${i.toString().padStart(2, "0")}`,
 				role: i % 2,
 			}));
-			axios.get.mockResolvedValue({ data: manyUsers });
+			axios.get.mockResolvedValue({ data: { users: manyUsers } });
 			renderUsersPage();
 
 			await waitFor(() => {
