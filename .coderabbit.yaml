@@ -1,3 +1,11 @@
+issue_enrichment:
+  planning:
+    enabled: true
+    auto_planning:
+      enabled: true
+      labels:
+        - "tests"
+        
 reviews:
   profile: "assertive"
   path_instructions:
