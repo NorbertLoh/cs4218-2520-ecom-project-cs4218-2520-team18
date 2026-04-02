@@ -1,5 +1,5 @@
 issue_enrichment:
-  planning:
+planning:
     enabled: true
     auto_planning:
       enabled: true
