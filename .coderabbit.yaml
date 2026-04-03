@@ -1,10 +1,10 @@
-# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
-planning:
-  enabled: true
-  auto_planning:
+issue_enrichment:
+  planning:
     enabled: true
-    labels:
-      - "tests"
+    auto_planning:
+      enabled: true
+      labels:
+        - "tests" # Auto-plan issues with this label
 
 reviews:
   profile: "assertive"
