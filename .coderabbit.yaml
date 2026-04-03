@@ -1,6 +1,4 @@
 issue_enrichment:
-  auto_enrich:
-    enabled: true
   planning:
     enabled: true
     auto_planning:
@@ -10,9 +8,6 @@ issue_enrichment:
 
 reviews:
   profile: "assertive"
-  auto_review:
-    enabled: true
-    require_checks: true
   path_instructions:
     - path: "src/**"
       instructions: |
