@@ -1,15 +1,8 @@
-issue_enrichment:
-  planning:
-    enabled: true
-    auto_planning:
-      enabled: true
-      labels:
-        - "tests" # Auto-plan issues with this label
-
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
 reviews:
-  profile: "assertive"
+  profile: assertive
   path_instructions:
-    - path: "src/**"
+    - path: src/**
       instructions: |
         You are a Senior QA Engineer specializing in BVA and EP.
         For every relevant code change in this path:
@@ -26,15 +19,20 @@ reviews:
            - Provide Playwright coverage for new or changed user flows.
            - Prefer deterministic selectors and stable waiting strategies.
         4. If existing related tests break, provide concrete test fixes.
-    - path: "controllers/**"
+    - path: controllers/**
       instructions: |
         Prioritize controller behavior validation:
         - Request validation and failure modes.
         - Correct status codes and response payload contracts.
         - Interaction with service/model dependencies.
-    - path: "models/**"
+    - path: models/**
       instructions: |
         Prioritize model/data-layer behavior:
         - Validation rules, required fields, and boundary constraints.
         - Persistence error handling and edge cases.
         - Query behavior for common and failure scenarios.
+issue_enrichment:
+  planning:
+    auto_planning:
+      labels:
+        - tests
