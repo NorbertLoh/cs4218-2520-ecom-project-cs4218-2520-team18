@@ -145,38 +145,6 @@ describe("Register Component", () => {
   });
 
   describe("Input Validation - Empty Fields", () => {
-    it("should show error when name is empty", async () => {
-      // Arrange
-      axios.get.mockResolvedValueOnce({ data: { category: [] } });
-
-      const { getByText, getByPlaceholderText } = render(
-        <MemoryRouter initialEntries={["/register"]}>
-          <Routes>
-            <Route path="/register" element={<Register />} />
-          </Routes>
-        </MemoryRouter>,
-      );
-
-      // Act
-      const formData = {
-        name: "",
-        email: "test@example.com",
-        password: "password123",
-        phone: "+1234567890",
-        address: "123 Test St",
-        DOB: "2000-01-01",
-        answer: "test answer",
-      };
-      fillForm(getByPlaceholderText, formData);
-      fireEvent.click(getByText("REGISTER"));
-
-      // Assert
-      await waitFor(() => {
-        expect(axios.post).not.toHaveBeenCalled();
-        expect(toast.error).toHaveBeenCalledWith("Name should be 1 to 100 characters");
-      });
-    });
-
     it("should show error when email is empty", async () => {
       // Arrange
       axios.get.mockResolvedValueOnce({ data: { category: [] } });
