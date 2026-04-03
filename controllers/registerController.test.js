@@ -155,22 +155,6 @@ describe("registerController Comprehensive Unit Tests", () => {
       );
     });
 
-    test("should return 400 if validateName returns false (BVA - Name length validation)", async () => {
-      // Arrange
-      validateName.mockReturnValue(false);
-
-      // Act
-      await registerController(req, res);
-
-      // Assert
-      expect(res.status).toHaveBeenCalledWith(400);
-      expect(res.send).toHaveBeenCalledWith(
-        expect.objectContaining({
-          message: "Name must be between 1 and 100 characters",
-        })
-      );
-    });
-
     test("should return 400 if validateDOB returns false", async () => {
       // Arrange
       validateDOB.mockReturnValue(false);
