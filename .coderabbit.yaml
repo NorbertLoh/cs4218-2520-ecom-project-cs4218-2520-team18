@@ -1,0 +1,60 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+reviews:
+  profile: assertive
+  path_instructions:
+    - path: "**/*.{test,spec}.js"
+      instructions: |-
+        You are a Senior QA Engineer specializing in BVA and EP.
+        Ensure all test files follow best practices:
+        1. Unit tests (Jest):
+           - Include Equivalence Partitioning classes (valid and invalid).
+           - Include Boundary Value Analysis where inputs have boundaries: min, min+1, max-1, max.
+           - Target strong statement and branch coverage.
+           - Use Arrange-Act-Assert structure.
+        2. Integration tests:
+           - Use Supertest for HTTP/API behavior where applicable.
+           - Verify status codes, response body shape, and key side effects.
+           - Mock only true external dependencies.
+        3. E2E tests:
+           - Provide Playwright coverage for new or changed user flows.
+           - Prefer deterministic selectors and stable waiting strategies.
+        4. If existing related tests break, provide concrete test fixes.
+    - path: src/**
+      instructions: |-
+        You are a Senior QA Engineer specializing in BVA and EP.
+        For every relevant code change in this path:
+        1. Unit tests (Jest):
+          - Include Equivalence Partitioning classes (valid and invalid).
+          - Include Boundary Value Analysis where inputs have boundaries: min, min+1, max-1, max.
+          - Target strong statement and branch coverage.
+          - Use Arrange-Act-Assert structure.
+        2. Integration tests:
+          - Use Supertest for HTTP/API behavior where applicable.
+          - Verify status codes, response body shape, and key side effects.
+          - Mock only true external dependencies.
+        3. E2E tests:
+          - Provide Playwright coverage for new or changed user flows.
+          - Prefer deterministic selectors and stable waiting strategies.
+        4. If existing related tests break, provide concrete test fixes.
+    - path: controllers/**
+      instructions: |-
+        Prioritize controller behavior validation:
+        - Request validation and failure modes.
+        - Correct status codes and response payload contracts.
+        - Interaction with service/model dependencies.
+    - path: models/**
+      instructions: |-
+        Prioritize model/data-layer behavior:
+        - Validation rules, required fields, and boundary constraints.
+        - Persistence error handling and edge cases.
+        - Query behavior for common and failure scenarios.
+  slop_detection:
+    label: AI SLOP
+  finishing_touches:
+    simplify:
+      enabled: true
+issue_enrichment:
+  planning:
+    auto_planning:
+      labels:
+        - tests
