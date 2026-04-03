@@ -1,12 +1,16 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
 planning:
+  enabled: true
+  auto_planning:
     enabled: true
-    auto_planning:
-      enabled: true
-      labels:
-        - "tests"
-        
+    labels:
+      - "tests"
+
 reviews:
   profile: "assertive"
+  auto_review:
+    enabled: true
+    require_checks: true
   path_instructions:
     - path: "src/**"
       instructions: |
@@ -14,14 +18,13 @@ reviews:
         For every relevant code change in this path:
         1. Unit tests (Jest):
            - Include Equivalence Partitioning classes (valid and invalid).
-           - Include Boundary Value Analysis where inputs have boundaries:
-             min, min+1, max-1, max.
+           - Include Boundary Value Analysis where inputs have boundaries: min, min+1, max-1, max.
            - Target strong statement and branch coverage.
            - Use Arrange-Act-Assert structure.
         2. Integration tests:
            - Use Supertest for HTTP/API behavior where applicable.
            - Verify status codes, response body shape, and key side effects.
-           - Mock only true external dependencies (third-party APIs, outbound services).
+           - Mock only true external dependencies.
         3. E2E tests:
            - Provide Playwright coverage for new or changed user flows.
            - Prefer deterministic selectors and stable waiting strategies.
