@@ -161,7 +161,7 @@ const Register = () => {
               onChange={(e) => setDOB(e.target.value)}
               className="form-control"
               id="exampleInputDOB1"
-              placeholder="Enter Your DOB"
+              placeholder="Date of Birth"
               required
             />
           </div>
