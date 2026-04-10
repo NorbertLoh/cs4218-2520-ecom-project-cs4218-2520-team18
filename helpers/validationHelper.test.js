@@ -7,6 +7,7 @@ import {
   validateDOB,
   validateDOBNotFuture,
   validateName,
+  isDummyBackendValue,
 } from "./validationHelper.js";
 
 describe("Validation Helper Tests", () => {
@@ -321,6 +322,60 @@ describe("Validation Helper Tests", () => {
 
           // Assert
           expect(result).toBe(expected);
+        },
+      );
+    });
+  });
+
+  describe("isDummyBackendValue", () => {
+    describe("EP - Equivalence Partitioning", () => {
+      test("should return true for exact 'dummy' string", () => {
+        // Arrange
+        const value = "dummy";
+
+        // Act
+        const result = isDummyBackendValue(value);
+
+        // Assert
+        expect(result).toBe(true);
+      });
+
+      test.each([
+        ["notdummy", "Non-dummy string"],
+        ["test", "Different string"],
+        ["backend", "Another string"],
+        ["dummy backend", "Dummy with extra text"],
+      ])(
+        "should return false for non-dummy string %p (%s)",
+        (value, description) => {
+          // Arrange & Act
+          const result = isDummyBackendValue(value);
+
+          // Assert
+          expect(result).toBe(false);
+        },
+      );
+    });
+
+    describe("BVA - Boundary Value Analysis", () => {
+      test.each([
+        ["", "Empty string"],
+        ["dummy ", "Trailing space"],
+        [" dummy", "Leading space"],
+        [" Dummy", "Leading space with capital"],
+        ["Dummy", "Capitalized"],
+        ["DUMMY", "Uppercase"],
+        ["DuMmY", "Mixed case"],
+        [null, "Null value"],
+        [undefined, "Undefined value"],
+      ])(
+        "should return false for boundary case %p (%s)",
+        (value, description) => {
+          // Arrange & Act
+          const result = isDummyBackendValue(value);
+
+          // Assert
+          expect(result).toBe(false);
         },
       );
     });

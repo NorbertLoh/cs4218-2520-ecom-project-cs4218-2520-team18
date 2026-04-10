@@ -16,8 +16,7 @@ export const testController = (req, res) => {
     console.error(error);
     return res.status(500).send({
       success: false,
-      message: 'Error in Test',
-      error,
+      message: 'Internal server error',
     });
   }
 };
