@@ -167,7 +167,7 @@ describe('Register Component', () => {
         password: 'password123',
         phone: '+1234567890',
         address: '123 Test St',
-        DOB: '2000-01-01',
+        dob: '2000-01-01',
         answer: 'test answer',
       };
       fillForm(getByPlaceholderText, formData);
@@ -200,7 +200,7 @@ describe('Register Component', () => {
         password: '',
         phone: '+1234567890',
         address: '123 Test St',
-        DOB: '2000-01-01',
+        dob: '2000-01-01',
         answer: 'test answer',
       };
       fillForm(getByPlaceholderText, formData);
@@ -237,7 +237,7 @@ describe('Register Component', () => {
         password: 'password123',
         phone: '',
         address: '123 Test St',
-        DOB: '2000-01-01',
+        dob: '2000-01-01',
         answer: 'test answer',
       };
       fillForm(getByPlaceholderText, formData);
@@ -272,7 +272,7 @@ describe('Register Component', () => {
         password: 'password123',
         phone: '+1234567890',
         address: '123 Test St',
-        DOB: '',
+        dob: '',
         answer: 'test answer',
       };
       fillForm(getByPlaceholderText, formData);
@@ -306,7 +306,7 @@ describe('Register Component', () => {
         password: 'password123',
         phone: '+1234567890',
         address: '123 Test St',
-        DOB: '2000-01-01',
+        dob: '2000-01-01',
         answer: '',
       };
       fillForm(getByPlaceholderText, formData);

@@ -101,9 +101,10 @@ describe('registerController Comprehensive Unit Tests', () => {
 
       // Assert
       expect(res.status).toHaveBeenCalledWith(400);
-      expect(res.send).toHaveBeenCalledWith(
-        expect.objectContaining({ message: 'Name is Required' }),
-      );
+      expect(res.send).toHaveBeenCalledWith({
+        success: false,
+        message: 'Name is Required',
+      });
     });
   });
 
