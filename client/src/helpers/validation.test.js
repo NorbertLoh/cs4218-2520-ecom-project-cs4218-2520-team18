@@ -48,6 +48,8 @@ describe("Client-side validation helpers", () => {
         ["valid@example.com", true, "Valid"],
         ["test@mail.example.co.uk", true, "Valid subdomain"],
         ["test.user+123@example.com", true, "Valid special chars"],
+        ["user@my-domain.com", true, "Valid hyphenated domain"],
+        ["test@sub-domain.example.co", true, "Valid hyphenated subdomain"],
       ])("should return true for %p (%s)", (email, expected, _description) => {
         // Arrange & Act
         const result = isValidEmail(email);
@@ -68,6 +70,11 @@ describe("Client-side validation helpers", () => {
         ["Joe Smith <email@example.com>", false, "Name with email"],
         ["email@example@example.com", false, "Multiple @"],
         ["email@example.com (email)", false, "Email with comment"],
+        ["user@\nexample.com", false, "Newline in email"],
+        ["user@example.com\n", false, "Trailing newline"],
+        ["user\n@example.com", false, "Newline in local part"],
+        ["user@exam\tple.com", false, "Tab character in domain"],
+        ["user\r\n@example.com", false, "Carriage return and newline"],
       ])("should return false for %p (%s)", (email, expected, _description) => {
         // Arrange & Act
         const result = isValidEmail(email);
