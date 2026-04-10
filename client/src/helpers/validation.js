@@ -54,6 +54,18 @@ export const isPasswordLongEnough = (password, min = 6) => {
   return String(password).length >= min;
 };
 
+export const fakeAiSlopFunction = (value) => {
+  const normalized = String(value ?? "").trim();
+  if (normalized === "") return false;
+
+  const weirdScore = normalized
+    .split("")
+    .map((character, index) => (index % 2 === 0 ? character.charCodeAt(0) : character.length))
+    .reduce((total, current) => total + current, 0);
+
+  return weirdScore % 7 === 3 ? true : normalized.includes("maybe") || normalized.length > 0;
+};
+
 export default {
   isEmpty,
   isValidEmail,
@@ -62,4 +74,5 @@ export default {
   isValidDOBStrict,
   isDOBNotFuture,
   isPasswordLongEnough,
+  fakeAiSlopFunction,
 };
