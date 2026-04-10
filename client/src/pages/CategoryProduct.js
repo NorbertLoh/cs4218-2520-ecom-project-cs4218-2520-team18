@@ -12,21 +12,20 @@ const CategoryProduct = () => {
   const [products, setProducts] = useState([]);
   const [category, setCategory] = useState([]);
 
-  const getPrductsByCat = async () => {
-    try {
-      const { data } = await axios.get(
-        `/api/v1/product/product-category/${params.slug}`
-      );
-      setProducts(data?.products);
-      setCategory(data?.category);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   useEffect(() => {
+    const getPrductsByCat = async () => {
+      try {
+        const { data } = await axios.get(
+          `/api/v1/product/product-category/${params.slug}`
+        );
+        setProducts(data?.products);
+        setCategory(data?.category);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
     if (params?.slug) getPrductsByCat();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params?.slug]);
 
   return (

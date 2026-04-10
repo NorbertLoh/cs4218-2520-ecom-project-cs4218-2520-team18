@@ -90,6 +90,23 @@ describe("Client-side validation helpers", () => {
         expect(result).toBe(expected);
       });
     });
+
+    describe("EP - Emails with newlines/multiline (should be rejected)", () => {
+      test.each([
+        ["test@example.com\n", false, "Email with trailing newline"],
+        ["\ntest@example.com", false, "Email with leading newline"],
+        ["test@example.com\nmalicious@evil.com", false, "Email with embedded newline"],
+        ["test\n@example.com", false, "Newline in local part"],
+        ["test@\nexample.com", false, "Newline in domain"],
+        ["test@example.com\r\n", false, "Email with CRLF"],
+      ])("should return false for %p (%s)", (email, expected, _description) => {
+        // Arrange & Act
+        const result = isValidEmail(email);
+
+        // Assert
+        expect(result).toBe(expected);
+      });
+    });
   });
 
   describe("isValidPhone", () => {
