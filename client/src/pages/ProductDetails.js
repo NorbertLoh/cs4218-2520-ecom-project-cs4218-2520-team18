@@ -13,10 +13,6 @@ const ProductDetails = () => {
   const [product, setProduct] = useState({});
   const [relatedProducts, setRelatedProducts] = useState([]);
 
-  //initalp details
-  useEffect(() => {
-    if (params?.slug) getProduct();
-  }, [params?.slug]);
   //getProduct
   const getProduct = async () => {
     try {
@@ -40,6 +36,13 @@ const ProductDetails = () => {
       console.log(error);
     }
   };
+
+  //initalp details
+  useEffect(() => {
+    if (params?.slug) getProduct();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [params?.slug]);
+
   return (
     <Layout>
       <div className="row container product-details">
