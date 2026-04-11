@@ -21,7 +21,7 @@ const registerUserViaUi = async (page, user) => {
   await page.getByPlaceholder("Enter Your Password").fill(user.password);
   await page.getByPlaceholder("Enter Your Phone").fill(user.phone);
   await page.getByPlaceholder("Enter Your Address").fill(user.address);
-  await page.getByPlaceholder("Enter Your DOB").fill(user.dob);
+  await page.getByPlaceholder("Date of Birth").fill(user.dob);
   await page.getByPlaceholder("What is Your Favorite sports").fill(user.answer);
   await page.getByRole("button", { name: "REGISTER" }).click();
   await expect(page).toHaveURL(/\/login$/);
@@ -218,7 +218,7 @@ test.describe("Profile E2E flows", () => {
 
     const wasProfileRequestSent = setupProfileRequestMonitor(page);
 
-    await page.getByPlaceholder("Enter Your DOB").fill("2099-01-01");
+    await page.getByPlaceholder("Date of Birth").fill("2099-01-01");
     await clickUpdate(page);
 
     await expect(page.getByText("DOB cannot be in the future")).toBeVisible();

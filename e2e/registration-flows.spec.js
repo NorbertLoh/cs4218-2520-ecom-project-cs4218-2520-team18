@@ -20,7 +20,7 @@ const fillRegistrationForm = async (page, user) => {
   await page.getByPlaceholder("Enter Your Password").fill(user.password);
   await page.getByPlaceholder("Enter Your Phone").fill(user.phone);
   await page.getByPlaceholder("Enter Your Address").fill(user.address);
-  await page.getByPlaceholder("Enter Your DOB").fill(user.dob);
+  await page.getByPlaceholder("Date of Birth").fill(user.dob);
   await page.getByPlaceholder("What is Your Favorite sports").fill(user.answer);
 };
 

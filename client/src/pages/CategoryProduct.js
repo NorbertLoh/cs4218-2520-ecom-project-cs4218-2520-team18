@@ -12,9 +12,6 @@ const CategoryProduct = () => {
   const [products, setProducts] = useState([]);
   const [category, setCategory] = useState([]);
 
-  useEffect(() => {
-    if (params?.slug) getPrductsByCat();
-  }, [params?.slug]);
   const getPrductsByCat = async () => {
     try {
       const { data } = await axios.get(
@@ -26,6 +23,11 @@ const CategoryProduct = () => {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    if (params?.slug) getPrductsByCat();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [params?.slug]);
 
   return (
     <Layout>

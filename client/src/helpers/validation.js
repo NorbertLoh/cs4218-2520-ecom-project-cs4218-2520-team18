@@ -6,7 +6,7 @@ export const isEmpty = (value) => {
 
 export const isValidEmail = (email) => {
   if (isEmpty(email)) return false;
-  const emailRegex = /^((?:[A-Za-z0-9!#$%&'*+\-/=?^_`{|}~]|(?<=^|\.)"|"(?=$|\.|@)|(?<=".*)[ .](?=.*")|(?<!\.)\.){1,64})(@)((?:[A-Za-z0-9.\-])*(?:[A-Za-z0-9])\.(?:[A-Za-z0-9]){2,})$/gm;
+  const emailRegex = /^((?:[A-Za-z0-9!#$%&'*+/=?^_`{|}~]|(?<=^|\.)"|"(?=$|\.|@)|(?<=".*)[ .](?=.*")|(?<!\.)\.){1,64})(@)((?:[A-Za-z0-9.-])*(?:[A-Za-z0-9])\.(?:[A-Za-z0-9]){2,})$/gm;
   return emailRegex.test(email);
 };
 
@@ -52,14 +52,4 @@ export const isDOBNotFuture = (dob) => {
 
 export const isPasswordLongEnough = (password, min = 6) => {
   return String(password).length >= min;
-};
-
-export default {
-  isEmpty,
-  isValidEmail,
-  isValidPhone,
-  isValidDOBFormat,
-  isValidDOBStrict,
-  isDOBNotFuture,
-  isPasswordLongEnough,
 };
