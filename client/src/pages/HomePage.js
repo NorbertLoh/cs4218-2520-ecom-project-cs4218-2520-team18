@@ -62,6 +62,7 @@ const HomePage = () => {
   useEffect(() => {
     if (page === 1) return;
     loadMore();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
   //load more
   const loadMore = async () => {
@@ -88,10 +89,12 @@ const HomePage = () => {
   };
   useEffect(() => {
     if (!checked.length || !radio.length) getAllProducts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [checked.length, radio.length]);
 
   useEffect(() => {
     if (checked.length || radio.length) filterProduct();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [checked, radio]);
 
   //get filterd product
